@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SyskeySoftlabs.Scribbler.Service.Db;
 
 namespace Portfolio.Service.Db;
 
@@ -11,7 +10,7 @@ public partial class AppDbContext : DbContext
     /// <summary>
     /// Application configuration.
     /// </summary>
-    public DbSet<AppConfig> AppConfig { get; set; }
+    public DbSet<User> user { get; set; }
 
     /// <summary>
     /// Constructor for AppDbContext.
@@ -30,7 +29,7 @@ public partial class AppDbContext : DbContext
     {
         base.OnModelCreating(builder);
 
-        builder.Entity<AppConfig>();
+        builder.Entity<User>();
         //Default data seeding 
     }
 }
