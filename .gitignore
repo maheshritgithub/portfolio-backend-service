@@ -3,9 +3,6 @@
 
 .idea
 logs/
-Entities/SyskeySoftlabs.Scribbler.Entities.xml
-Service/SyskeySoftlabs.Scribbler.Service.xml
-Service/scribbler.data
 Service/wwwroot/
 # User-specific files
 *.suo
