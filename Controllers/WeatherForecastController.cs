@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Portfolio.Service.Db;
+using SyskeySoftlabs.Scribbler.Service.Db;
 
 namespace portfolio.service.Controllers;
 
@@ -7,15 +9,18 @@ namespace portfolio.service.Controllers;
 public class DummyController : ControllerBase
 {
     private readonly ILogger<DummyController> _logger;
-
-    public DummyController(ILogger<DummyController> logger)
+    private readonly AppDbContext _dbContext;
+    public DummyController(ILogger<DummyController> logger, AppDbContext appDbContext)
     {
         _logger = logger;
+        _dbContext = appDbContext;
     }
 
-    [HttpGet]
-    public ActionResult<string> Get()
+    [HttpPost]
+    public ActionResult<string> Get(AppConfig appConfig)
     {
-        return "This is a dummy endpoint for testing purposes.";
+        _dbContext.AppConfig.Add(appConfig);
+        _dbContext.SaveChanges();
+        return Ok(appConfig);
     }
 }
