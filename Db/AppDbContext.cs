@@ -3,33 +3,26 @@
 namespace Portfolio.Service.Db;
 
 /// <summary>
-/// Application database Context.
+/// Application database context.
 /// </summary>
-public partial class AppDbContext : DbContext
+public partial class AppDbContext(DbContextOptions<AppDbContext> options)
+    : DbContext(options)
 {
     /// <summary>
-    /// Application configuration.
+    /// Application users.
     /// </summary>
-    public DbSet<User> user { get; set; }
+    public DbSet<User> User { get; set; }
 
     /// <summary>
-    /// Constructor for AppDbContext.
+    /// Invoked during model creation.
     /// </summary>
-    /// <param name="options">DbContextOptions object.</param>
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-    {
-
-    }
-
-    /// <summary>
-    /// Invoked during the model creation.
-    /// </summary>
-    /// <param name="builder">The model builder object.</param>
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
 
-        builder.Entity<User>();
-        //Default data seeding 
+        // Username duplicate handling
+        builder.Entity<User>()
+            .HasIndex(u => u.Username)
+            .IsUnique();
     }
 }
