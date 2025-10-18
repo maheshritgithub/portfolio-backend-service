@@ -44,6 +44,8 @@ public class UserDetailsService(AppDbContext dbContext, IMapper mapper, ILogger<
         {
             UserDetails userDetails = mapper.Map<UserDetails>(aboutMe);
             userDetails.UserId = userId;
+            userDetails.CreatedAt = DateTime.UtcNow;
+            userDetails.UpdatedAt = userDetails.CreatedAt;
 
             dbContext.UserDetail.Add(userDetails);
             await dbContext.SaveChangesAsync();
@@ -70,6 +72,7 @@ public class UserDetailsService(AppDbContext dbContext, IMapper mapper, ILogger<
 
             mapper.Map(aboutMe, userDetails);
             userDetails.UserId = userId;
+            userDetails.UpdatedAt = DateTime.UtcNow;
 
             await dbContext.SaveChangesAsync();
 
