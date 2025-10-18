@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Portfolio.Service.Db.Models;
 
-public class UserDetails
+public class UserDetails : BaseTimeHandling
 {
     [Key]
     public Guid Id { get; set; }
