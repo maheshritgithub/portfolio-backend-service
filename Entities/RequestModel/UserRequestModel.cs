@@ -1,8 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿
+
+using System.ComponentModel.DataAnnotations;
 
 namespace Portfolio.Entities;
 
-public class UserModel
+public class UserRequestModel
 {
     [Required]
     [MaxLength(100)]
@@ -16,4 +18,12 @@ public class UserModel
     [EmailAddress(ErrorMessage = "Invalid email address")]
     [MaxLength(150)]
     public string Email { get; set; } = default!;
+
+    [Required]
+    [MaxLength(2000)]
+    public string Message { get; set; } = default!;
+
+    [Required]
+    [MaxLength(100)]
+    public string Subject { get; set; } = default!;
 }

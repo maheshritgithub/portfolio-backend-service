@@ -2,6 +2,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Portfolio.Service.Db;
 using Portfolio.Service.Misc;
+using Portfolio.Service.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,10 +25,30 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(newConnectionString.ToString());
 });
 
+var enableCors = builder.Configuration.GetValue<bool>("AppConfig:EnableCors");
+
+var corsUrls = builder.Configuration.GetSection("AppConfig:CorsUrls").Get<string[]>() ?? [];
+
+if (enableCors && corsUrls.Length > 0)
+{
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("Dev",
+            builder => builder.WithOrigins(corsUrls)
+                .AllowAnyHeader()
+                .AllowCredentials()
+                .AllowAnyMethod()
+                .WithExposedHeaders("Pagination-Metadata", "Content-Disposition")
+        );
+    });
+}
+
 // Register application services
 builder.Services
-    .AddScoped<Portfolio.Service.Contract.IUserService, Portfolio.Service.Service.UserService>();
+    .AddScoped<Portfolio.Service.Contract.IUserService, UserService>()
+    .AddScoped<Portfolio.Service.Contract.IUserDetailsService, Portfolio.Service.Service.UserDetailsService>();
 
+// Add Swagger/OpenAPI
 // Add Swagger/OpenAPI
 builder.Services.AddSwaggerGen(options =>
 {
@@ -49,6 +70,11 @@ builder.Services.AddSwaggerGen(options =>
             Url = new Uri("https://opensource.org/licenses/MIT")
         }
     });
+
+    // Include XML comments
+    var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    options.IncludeXmlComments(xmlPath);
 });
 
 var app = builder.Build();
@@ -85,6 +111,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseAuthorization();
 app.MapControllers();
+
+if (enableCors && corsUrls.Length > 0)
+    app.UseCors("Dev");
 
 logger.LogInformation("Application startup complete. Listening for requests...");
 

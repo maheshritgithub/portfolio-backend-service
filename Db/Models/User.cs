@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Portfolio.Service.Db;
+namespace Portfolio.Service.Db.Models;
 
 public class User : BaseTimeHandling
 {
@@ -9,15 +9,17 @@ public class User : BaseTimeHandling
     public Guid Id { get; set; }
 
     [Required]
-    [MaxLength(50)]
     public string Username { get; set; } = default!;
 
     [Required]
-    [MaxLength(100)]
     public string FullName { get; set; } = default!;
 
     [Required]
-    [EmailAddress]
-    [MaxLength(150)]
     public string Email { get; set; } = default!;
+
+    [Required]
+    public string Message { get; set; } = default!;
+
+    [Required]
+    public string Subject { get; set; } = default!;
 }

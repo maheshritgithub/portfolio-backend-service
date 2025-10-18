@@ -1,4 +1,4 @@
-﻿namespace Portfolio.Service.Db;
+﻿namespace Portfolio.Service.Db.Models;
 
 public class BaseTimeHandling
 {
