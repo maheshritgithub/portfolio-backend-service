@@ -1,5 +1,4 @@
 ﻿using Portfolio.Entities;
-using Portfolio.Service.Db;
 
 namespace Portfolio.Service.Contract;
 
@@ -12,33 +11,40 @@ public interface IUserService
     /// Creates a new User.
     /// </summary>
     /// <param name="user">The User model to be created.</param>
-    /// <returns>The created User model.</returns>
-    Task<UserModel> AddAsync(UserModel user);
+    /// <returns>The created User.</returns>
+    Task<UserResponseModel> AddAsync(UserRequestModel user);
 
     /// <summary>
-    /// Retrieves a User by their name.
+    /// Retrieves a User by their username.
     /// </summary>
-    /// <param name="name">The name of the User to retrieve.</param>
-    /// <returns>The User model if found, otherwise null.</returns>
-    Task<UserModel?> GetAsync(string name);
+    /// <param name="name">The username of the User to retrieve.</param>
+    /// <returns>The User</returns>
+    Task<UserResponseModel?> GetAsync(string name);
+
+    /// <summary>
+    /// Retrieves a User by their userId.
+    /// </summary>
+    /// <param name="userId">The userId to retrieve.</param>
+    /// <returns>The User</returns>
+    Task<UserResponseModel?> GetAsync(Guid userId);
 
     /// <summary>
     /// Retrieves all users.
     /// </summary>
     /// <returns>A list of User models.</returns>
-    Task<List<UserModel>> GetAllAsync();
+    Task<List<UserResponseModel>> GetAllAsync();
 
     /// <summary>
-    /// Updates a User.
+    /// Updates a User by Id.
     /// </summary>
-    /// <param name="name">The name of the User to update.</param>
-    /// <param name="updatedUser">The updated User model.</param>
-    /// <returns>The updated User model.</returns>
-    Task<UserModel> UpdateAsync(string name, User updatedUser);
+    /// <param name="userId">The ID of the User to update.</param>
+    /// <param name="updatedUser">The model containing the user details to be updated</param>
+    /// <returns>The updated User.</returns>
+    Task<UserResponseModel> UpdateAsync(Guid userId, UserRequestModel updatedUser);
 
     /// <summary>
-    /// Deletes a User.
+    /// Deletes a User by Id.
     /// </summary>
-    /// <param name="name">The name of the User to delete.</param>
-    Task DeleteAsync(string name);
+    /// <param name="userId">The ID of the User to delete.</param>
+    Task DeleteAsync(Guid userId);
 }

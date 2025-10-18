@@ -11,8 +11,8 @@ using Portfolio.Service.Db;
 namespace Portfolio.Service.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251016170022_user")]
-    partial class user
+    [Migration("20251018132948_UserDetails")]
+    partial class UserDetails
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,12 +31,18 @@ namespace Portfolio.Service.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(150)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("FullName")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -44,7 +50,6 @@ namespace Portfolio.Service.Migrations
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -53,6 +58,43 @@ namespace Portfolio.Service.Migrations
                         .IsUnique();
 
                     b.ToTable("User");
+                });
+
+            modelBuilder.Entity("Portfolio.Service.Db.UserDetails", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("About")
+                        .IsRequired()
+                        .HasMaxLength(3000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<byte[]>("ProfileImage")
+                        .HasColumnType("BLOB");
+
+                    b.Property<string>("SkillSet")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("UserDetail");
+                });
+
+            modelBuilder.Entity("Portfolio.Service.Db.UserDetails", b =>
+                {
+                    b.HasOne("Portfolio.Service.Db.User", null)
+                        .WithOne()
+                        .HasForeignKey("Portfolio.Service.Db.UserDetails", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

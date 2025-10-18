@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Portfolio.Service.Db.Models;
+using System.Reflection.Emit;
 
 namespace Portfolio.Service.Db;
 
@@ -14,15 +16,36 @@ public partial class AppDbContext(DbContextOptions<AppDbContext> options)
     public DbSet<User> User { get; set; }
 
     /// <summary>
+    /// UserDetail Info for a user
+    /// </summary>
+    public DbSet<UserDetails> UserDetail { get; set; }
+
+    /// <summary>
     /// Invoked during model creation.
     /// </summary>
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
 
+        DefaultAboutMeDbBindings(builder);
+
         // Username duplicate handling
+        DefaultUserDbBindings(builder);
+    }
+
+    private static void DefaultUserDbBindings(ModelBuilder builder)
+    {
         builder.Entity<User>()
             .HasIndex(u => u.Username)
             .IsUnique();
+    }
+
+    private static void DefaultAboutMeDbBindings(ModelBuilder builder)
+    {
+        builder.Entity<UserDetails>()
+           .HasOne<User>()
+           .WithOne()
+           .HasForeignKey<UserDetails>(a => a.UserId)
+           .OnDelete(DeleteBehavior.Cascade);
     }
 }

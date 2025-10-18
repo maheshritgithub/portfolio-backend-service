@@ -1,19 +1,26 @@
 using AutoMapper;
 using Portfolio.Entities;
-using Portfolio.Service.Db;
+using Portfolio.Service.Db.Models;
 using System.Diagnostics.CodeAnalysis;
 
-
-namespace Portfolio.Service.Misc;
-
-/// <summary>
-/// Class defines the mapping profiles for auto mapper
-/// </summary>
-[ExcludeFromCodeCoverage]
-internal class AutoMapperProfile : Profile
+namespace Portfolio.Service.Misc
 {
-    public AutoMapperProfile()
+    /// <summary>
+    /// Defines mapping profiles for AutoMapper
+    /// </summary>
+    [ExcludeFromCodeCoverage]
+    internal class AutoMapperProfile : Profile
     {
-        CreateMap<User, UserModel>().ReverseMap();
+        public AutoMapperProfile()
+        {
+            //User Mapping Config
+            CreateMap<UserRequestModel, User>();
+            CreateMap<User, UserResponseModel>();
+
+            // User Details mapping config
+            CreateMap<UserDetailsRequestModel, UserDetails>();
+            CreateMap<UserDetails, UserDetailsResponseModel>();
+
+        }
     }
 }

@@ -5,15 +5,15 @@ using Microsoft.Data.Sqlite;
 using Portfolio.Service.Contract;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper.QueryableExtensions;
-using User = Portfolio.Service.Db.User;
+using User = Portfolio.Service.Db.Models.User;
 
 namespace Portfolio.Service.Service;
 
 public class UserService(AppDbContext dbContext, IMapper mapper, ILogger<UserService> logger) : IUserService
 {
-    public async Task<UserModel> AddAsync(UserModel userModel)
+    public async Task<UserResponseModel> AddAsync(UserRequestModel userModel)
     {
-        var user = mapper.Map<User>(userModel);
+        User user = mapper.Map<User>(userModel);
 
         user.CreatedAt = DateTime.UtcNow;
         user.UpdatedAt = user.CreatedAt;
@@ -40,31 +40,30 @@ public class UserService(AppDbContext dbContext, IMapper mapper, ILogger<UserSer
             throw;
         }
 
-        return mapper.Map<UserModel>(user);
+        return mapper.Map<UserResponseModel>(user);
     }
 
-    public async Task<UserModel?> GetAsync(string name) 
+    public async Task<UserResponseModel?> GetAsync(string name) 
     { 
         return await dbContext.User.Where(u => u.Username == name)
-            .ProjectTo<UserModel>(mapper.ConfigurationProvider).FirstOrDefaultAsync(); 
+            .ProjectTo<UserResponseModel>(mapper.ConfigurationProvider).FirstOrDefaultAsync(); 
+    }
+    public async Task<UserResponseModel?> GetAsync(Guid userId) 
+    { 
+        return await dbContext.User.Where(u => u.Id == userId)
+            .ProjectTo<UserResponseModel>(mapper.ConfigurationProvider).FirstOrDefaultAsync(); 
     }
 
-    public async Task<List<UserModel>> GetAllAsync() 
+    public async Task<List<UserResponseModel>> GetAllAsync() 
     { 
         return await dbContext.User
-            .ProjectTo<UserModel>(mapper.ConfigurationProvider).ToListAsync(); 
+            .ProjectTo<UserResponseModel>(mapper.ConfigurationProvider).ToListAsync(); 
     }
 
-    public async Task<UserModel> UpdateAsync(string name, Db.User updatedUser)
+    public async Task<UserResponseModel> UpdateAsync(Guid userId, UserRequestModel updatedUser)
     {
-        var userEntity = await dbContext.User.FirstOrDefaultAsync(u => u.Username == name);
-
-        if (userEntity == null)
-        {
-            logger.LogWarning("UpdateAsync() -> : User not found - {Username}", name);
-
-            return null!;
-        }
+        User userEntity = await dbContext.User.FirstOrDefaultAsync(u => u.Id == userId) 
+            ?? throw new NotFoundException($"User with username '{userId}' was not found.");
 
         mapper.Map(updatedUser, userEntity);
         userEntity.UpdatedAt = DateTime.UtcNow;
@@ -75,7 +74,7 @@ public class UserService(AppDbContext dbContext, IMapper mapper, ILogger<UserSer
 
             await dbContext.SaveChangesAsync();
 
-            logger.LogInformation("UpdateAsync() -> user update succeeded for username: {Username}", name);
+            logger.LogInformation("UpdateAsync() -> user update succeeded for username: {Username}", userEntity.Username);
         }
         catch (DbUpdateException ex) when (ex.InnerException is SqliteException sqliteEx)
         {
@@ -86,27 +85,32 @@ public class UserService(AppDbContext dbContext, IMapper mapper, ILogger<UserSer
                 throw new InvalidOperationException($"Cannot update user. The username '{updatedUser.Username}' already exists.", ex);
             }
 
-            logger.LogError(ex, "UpdateAsync() -> user update failed for username: {Username}", name);
+            logger.LogError(ex, "UpdateAsync() -> user update failed for username: {Username}", userEntity.Username);
 
             throw;
         }
 
-        return mapper.Map<UserModel>(userEntity);
+        return mapper.Map<UserResponseModel>(userEntity);
     }
 
-    public async Task DeleteAsync(string name)
+    public async Task DeleteAsync(Guid userId)
     {
-        var userEntity = await dbContext.User.FirstOrDefaultAsync(u => u.Username == name);
-
-        if (userEntity == null)
+        User userEntity = await dbContext.User.FirstOrDefaultAsync(u => u.Id == userId)
+                ?? throw new NotFoundException("User not found.");
+        try
         {
-            return;
+            dbContext.User.Remove(userEntity);
+
+            await dbContext.SaveChangesAsync();
+
+            logger.LogInformation("DeleteAsync() -> User deletion succeeded for username: {Username}", userEntity.Username);
         }
+        catch(Exception exception)
+        {
+            logger.LogError(exception, "DeleteAsync() -> Error occured while deleting the user {userName}, Error Message : {errorMessage}",
+                userEntity.Username, exception.Message);
 
-        dbContext.User.Remove(userEntity);
-
-        await dbContext.SaveChangesAsync();
-
-        logger.LogInformation("DeleteAsync() -> User deletion succeeded for username: {Username}", name);
+            throw;
+        }
     }
 }
