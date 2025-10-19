@@ -21,16 +21,25 @@ public partial class AppDbContext(DbContextOptions<AppDbContext> options)
     public DbSet<UserDetails> UserDetail { get; set; }
 
     /// <summary>
+    /// User Experience details
+    /// </summary>
+    public DbSet<Experience> Experience { get; set; }
+
+
+    /// <summary>
     /// Invoked during model creation.
     /// </summary>
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
 
-        DefaultAboutMeDbBindings(builder);
-
         // Username duplicate handling
         DefaultUserDbBindings(builder);
+
+        DefaultUserDetailsDbBindings(builder);
+
+        DefaulExperienceDbBindings(builder);
+
     }
 
     private static void DefaultUserDbBindings(ModelBuilder builder)
@@ -40,12 +49,20 @@ public partial class AppDbContext(DbContextOptions<AppDbContext> options)
             .IsUnique();
     }
 
-    private static void DefaultAboutMeDbBindings(ModelBuilder builder)
+    private static void DefaultUserDetailsDbBindings(ModelBuilder builder)
     {
         builder.Entity<UserDetails>()
            .HasOne<User>()
            .WithOne()
            .HasForeignKey<UserDetails>(a => a.UserId)
+           .OnDelete(DeleteBehavior.Cascade);
+    }
+    private static void DefaulExperienceDbBindings(ModelBuilder builder)
+    {
+        builder.Entity<Experience>()
+           .HasOne<User>()
+           .WithOne()
+           .HasForeignKey<Experience>(a => a.UserId)
            .OnDelete(DeleteBehavior.Cascade);
     }
 }

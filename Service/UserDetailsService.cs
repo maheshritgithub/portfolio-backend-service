@@ -2,9 +2,9 @@
 using Portfolio.Entities;
 using Portfolio.Service.Db;
 using Portfolio.Service.Contract;
+using Portfolio.Service.Db.Models;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper.QueryableExtensions;
-using Portfolio.Service.Db.Models;
 
 namespace Portfolio.Service.Service;
 
@@ -12,7 +12,7 @@ public class UserDetailsService(AppDbContext dbContext, IMapper mapper, ILogger<
 {
     public async Task<UserDetailsResponseModel?> GetAsync(Guid userId)
     {
-        logger.LogInformation("GetAsync() -> Fetching About Me for user {UserId}", userId);
+        logger.LogInformation("GetAsync() -> Fetching User Details for user {UserId}", userId);
 
         return await dbContext.UserDetail
             .Where(a => a.UserId == userId)
@@ -22,7 +22,7 @@ public class UserDetailsService(AppDbContext dbContext, IMapper mapper, ILogger<
 
     public async Task<IEnumerable<UserDetailsResponseModel>> GetAllAsync()
     {
-        logger.LogInformation("GetAllAsync() -> Fetching all About Me records");
+        logger.LogInformation("GetAllAsync() -> Fetching all User Details records");
 
 
         return await dbContext.UserDetail
@@ -32,7 +32,7 @@ public class UserDetailsService(AppDbContext dbContext, IMapper mapper, ILogger<
 
     public async Task<UserDetailsResponseModel> AddAsync(Guid userId, UserDetailsRequestModel aboutMe)
     {
-        logger.LogInformation("AddAsync() -> Creating About Me for user {UserId}", userId);
+        logger.LogInformation("AddAsync() -> Creating User Details for user {UserId}", userId);
 
         _ = await userService.GetAsync(userId)
             ?? throw new NotFoundException("The specified user does not exist to add the details");
@@ -54,7 +54,7 @@ public class UserDetailsService(AppDbContext dbContext, IMapper mapper, ILogger<
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "AddAsync() -> Error occurred while creating About Me for user {UserId}", userId);
+            logger.LogError(ex, "AddAsync() -> Error occurred while creating User Details for user {UserId}", userId);
 
             throw;
         }
@@ -68,7 +68,7 @@ public class UserDetailsService(AppDbContext dbContext, IMapper mapper, ILogger<
 
             var userDetails = await dbContext.UserDetail
                 .FirstOrDefaultAsync(a => a.UserId == userId && a.Id == aboutMeId)
-                ?? throw new NotFoundException("About Me information not found for the specified user.");
+                ?? throw new NotFoundException("User Details information not found for the specified user.");
 
             mapper.Map(aboutMe, userDetails);
             userDetails.UserId = userId;
@@ -76,13 +76,13 @@ public class UserDetailsService(AppDbContext dbContext, IMapper mapper, ILogger<
 
             await dbContext.SaveChangesAsync();
 
-            logger.LogInformation("UpdateAsync() -> Successfully updated About Me for user {UserId}", userId);
+            logger.LogInformation("ChangeDetailsAsync() -> Successfully updated User Details for user {UserId}", userId);
 
             return mapper.Map<UserDetailsResponseModel>(userDetails);
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "UpdateAsync() -> Error occurred while updating About Me for user {UserId}", userId);
+            logger.LogError(ex, "ChangeDetailsAsync() -> Error occurred while updating User Details for user {UserId}", userId);
             throw;
         }
     }
@@ -93,16 +93,17 @@ public class UserDetailsService(AppDbContext dbContext, IMapper mapper, ILogger<
         {
             UserDetails userDetails = await dbContext.UserDetail
                 .FirstOrDefaultAsync(a => a.UserId == userId)
-                ?? throw new NotFoundException("About Me information not found for the specified user.");
+                ?? throw new NotFoundException("User Details information not found for the specified user.");
 
             dbContext.UserDetail.Remove(userDetails);
             await dbContext.SaveChangesAsync();
 
-            logger.LogInformation("DeleteAsync() -> Successfully deleted About Me for user {UserId}", userId);
+            logger.LogInformation("DeleteAsync() -> Successfully deleted User Details for user {UserId}", userId);
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "DeleteAsync() -> Error occurred while deleting About Me for user {UserId}", userId);
+            logger.LogError(ex, "DeleteAsync() -> Error occurred while deleting User Details for user {UserId}", userId);
+            
             throw;
         }
     }

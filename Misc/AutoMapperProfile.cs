@@ -1,5 +1,7 @@
 using AutoMapper;
 using Portfolio.Entities;
+using Portfolio.Entities.RequestModel;
+using Portfolio.Entities.ResponseModel;
 using Portfolio.Service.Db.Models;
 using System.Diagnostics.CodeAnalysis;
 
@@ -20,6 +22,12 @@ namespace Portfolio.Service.Misc
             // User Details mapping config
             CreateMap<UserDetailsRequestModel, UserDetails>();
             CreateMap<UserDetails, UserDetailsResponseModel>();
+
+            // User experience mapping config
+            CreateMap<ExperienceRequestModel, Experience>();
+            CreateMap<Experience, ExperienceResponseModel>();
+
+            
 
         }
     }

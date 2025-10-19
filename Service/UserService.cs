@@ -74,18 +74,18 @@ public class UserService(AppDbContext dbContext, IMapper mapper, ILogger<UserSer
 
             await dbContext.SaveChangesAsync();
 
-            logger.LogInformation("UpdateAsync() -> user update succeeded for username: {Username}", userEntity.Username);
+            logger.LogInformation("ChangeDetailsAsync() -> user update succeeded for username: {Username}", userEntity.Username);
         }
         catch (DbUpdateException ex) when (ex.InnerException is SqliteException sqliteEx)
         {
             if (sqliteEx.SqliteErrorCode == 19)
             {
-                logger.LogWarning("UpdateAsync() -> user update failed: Username already exists - {Username}", updatedUser.Username);
+                logger.LogWarning("ChangeDetailsAsync() -> user update failed: Username already exists - {Username}", updatedUser.Username);
 
                 throw new InvalidOperationException($"Cannot update user. The username '{updatedUser.Username}' already exists.", ex);
             }
 
-            logger.LogError(ex, "UpdateAsync() -> user update failed for username: {Username}", userEntity.Username);
+            logger.LogError(ex, "ChangeDetailsAsync() -> user update failed for username: {Username}", userEntity.Username);
 
             throw;
         }
