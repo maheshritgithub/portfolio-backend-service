@@ -98,7 +98,7 @@ Open your browser and visit:
 ---
 
 ## 🧑‍💻 Author
-**Mahesh** (Software Developer)  
+**Mahesh** (Backend-Focused .NET Developer | Angular Enthusiast)  
 [LinkedIn Profile](https://www.linkedin.com/in/mahesh-kumar-selvaraj-b866591ab/)
 
 ---
