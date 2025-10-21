@@ -47,6 +47,11 @@ namespace Portfolio.Service.Db
         public DbSet<Project> Project { get; set; }
 
         /// <summary>
+        /// User Resume details.
+        /// </summary>
+        public DbSet<Resume> Resume { get; set; }
+
+        /// <summary>
         /// Invoked during model creation.
         /// </summary>
         protected override void OnModelCreating(ModelBuilder builder)
@@ -57,6 +62,7 @@ namespace Portfolio.Service.Db
             DefaultUserDetailsDbBindings(builder);
             DefaultExperienceDbBindings(builder);
             DefaultProjectDbBindings(builder);
+            DefaultResumeDbBindings(builder);
         }
 
         private static void DefaultUserDbBindings(ModelBuilder builder)
@@ -97,6 +103,15 @@ namespace Portfolio.Service.Db
                 .HasConversion(
                 serialize => JsonSerializer.Serialize(serialize, SerializerOptions),
                 deserialize => JsonSerializer.Deserialize<ProjectImage>(deserialize, SerializerOptions)!);
+        }
+
+        private static void DefaultResumeDbBindings(ModelBuilder builder)
+        {
+            builder.Entity<Resume>()
+                .HasOne<User>()
+                .WithOne()
+                .HasForeignKey<Resume>(a => a.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
