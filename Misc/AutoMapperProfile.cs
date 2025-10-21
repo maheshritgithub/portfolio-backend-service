@@ -1,9 +1,9 @@
 using AutoMapper;
 using Portfolio.Entities;
-using Portfolio.Entities.RequestModel;
-using Portfolio.Entities.ResponseModel;
 using Portfolio.Service.Db.Models;
 using System.Diagnostics.CodeAnalysis;
+using Portfolio.Entities.RequestModel;
+using Portfolio.Entities.ResponseModel;
 
 namespace Portfolio.Service.Misc
 {
@@ -27,8 +27,9 @@ namespace Portfolio.Service.Misc
             CreateMap<ExperienceRequestModel, Experience>();
             CreateMap<Experience, ExperienceResponseModel>();
 
-            
-
+            // User Project mapping config
+            CreateMap<ProjectRequestModel, Project>();
+            CreateMap<Project, ProjectResponseModel>();
         }
     }
 }
