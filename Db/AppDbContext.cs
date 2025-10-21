@@ -1,68 +1,102 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Text.Json;
 using Portfolio.Service.Db.Models;
-using System.Reflection.Emit;
+using System.Text.Json.Serialization;
+using Microsoft.EntityFrameworkCore;
+using Portfolio.Entities.RequestModel;
 
-namespace Portfolio.Service.Db;
-
-/// <summary>
-/// Application database context.
-/// </summary>
-public partial class AppDbContext(DbContextOptions<AppDbContext> options)
-    : DbContext(options)
+namespace Portfolio.Service.Db
 {
     /// <summary>
-    /// Application users.
+    /// Application database context.
     /// </summary>
-    public DbSet<User> User { get; set; }
-
-    /// <summary>
-    /// UserDetail Info for a user
-    /// </summary>
-    public DbSet<UserDetails> UserDetail { get; set; }
-
-    /// <summary>
-    /// User Experience details
-    /// </summary>
-    public DbSet<Experience> Experience { get; set; }
-
-
-    /// <summary>
-    /// Invoked during model creation.
-    /// </summary>
-    protected override void OnModelCreating(ModelBuilder builder)
+    public partial class AppDbContext : DbContext
     {
-        base.OnModelCreating(builder);
+        private static readonly JsonSerializerOptions SerializerOptions;
 
-        // Username duplicate handling
-        DefaultUserDbBindings(builder);
+        static AppDbContext()
+        {
+            SerializerOptions = new JsonSerializerOptions
+            {
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+            };
+        }
 
-        DefaultUserDetailsDbBindings(builder);
+        public AppDbContext(DbContextOptions<AppDbContext> options)
+            : base(options)
+        {
+        }
 
-        DefaulExperienceDbBindings(builder);
+        /// <summary>
+        /// Application users.
+        /// </summary>
+        public DbSet<User> User { get; set; }
 
-    }
+        /// <summary>
+        /// User details info for a user.
+        /// </summary>
+        public DbSet<UserDetails> UserDetail { get; set; }
 
-    private static void DefaultUserDbBindings(ModelBuilder builder)
-    {
-        builder.Entity<User>()
-            .HasIndex(u => u.Username)
-            .IsUnique();
-    }
+        /// <summary>
+        /// User experience details.
+        /// </summary>
+        public DbSet<Experience> Experience { get; set; }
 
-    private static void DefaultUserDetailsDbBindings(ModelBuilder builder)
-    {
-        builder.Entity<UserDetails>()
-           .HasOne<User>()
-           .WithOne()
-           .HasForeignKey<UserDetails>(a => a.UserId)
-           .OnDelete(DeleteBehavior.Cascade);
-    }
-    private static void DefaulExperienceDbBindings(ModelBuilder builder)
-    {
-        builder.Entity<Experience>()
-           .HasOne<User>()
-           .WithOne()
-           .HasForeignKey<Experience>(a => a.UserId)
-           .OnDelete(DeleteBehavior.Cascade);
+        /// <summary>
+        /// Project details.
+        /// </summary>
+        public DbSet<Project> Project { get; set; }
+
+        /// <summary>
+        /// Invoked during model creation.
+        /// </summary>
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            DefaultUserDbBindings(builder);
+            DefaultUserDetailsDbBindings(builder);
+            DefaultExperienceDbBindings(builder);
+            DefaultProjectDbBindings(builder);
+        }
+
+        private static void DefaultUserDbBindings(ModelBuilder builder)
+        {
+            builder.Entity<User>()
+                .HasIndex(u => u.Username)
+                .IsUnique();
+        }
+
+        private static void DefaultUserDetailsDbBindings(ModelBuilder builder)
+        {
+            builder.Entity<UserDetails>()
+                .HasOne<User>()
+                .WithOne()
+                .HasForeignKey<UserDetails>(a => a.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
+
+        private static void DefaultExperienceDbBindings(ModelBuilder builder)
+        {
+            builder.Entity<Experience>()
+                .HasOne<User>()
+                .WithOne()
+                .HasForeignKey<Experience>(a => a.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
+
+        private static void DefaultProjectDbBindings(ModelBuilder builder)
+        {
+            builder.Entity<Project>()
+                .HasOne<User>()
+                .WithMany()
+                .HasForeignKey(a => a.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Project>()
+                .Property(d => d.Image)
+                .HasConversion(
+                serialize => JsonSerializer.Serialize(serialize, SerializerOptions),
+                deserialize => JsonSerializer.Deserialize<ProjectImage>(deserialize, SerializerOptions)!);
+        }
     }
 }

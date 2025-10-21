@@ -47,7 +47,8 @@ if (enableCors && corsUrls.Length > 0)
 builder.Services
     .AddScoped<Portfolio.Service.Contract.IUserService, UserService>()
     .AddScoped<Portfolio.Service.Contract.IUserDetailsService, UserDetailsService>()
-    .AddScoped<Portfolio.Service.Contract.IExperienceService, ExperienceService>();
+    .AddScoped<Portfolio.Service.Contract.IExperienceService, ExperienceService>()
+    .AddScoped<Portfolio.Service.Contract.IProjectService, ProjectService>();
 
 // Add Swagger/OpenAPI
 // Add Swagger/OpenAPI
