@@ -48,9 +48,9 @@ builder.Services
     .AddScoped<Portfolio.Service.Contract.IUserService, UserService>()
     .AddScoped<Portfolio.Service.Contract.IUserDetailsService, UserDetailsService>()
     .AddScoped<Portfolio.Service.Contract.IExperienceService, ExperienceService>()
-    .AddScoped<Portfolio.Service.Contract.IProjectService, ProjectService>();
+    .AddScoped<Portfolio.Service.Contract.IProjectService, ProjectService>()
+    .AddScoped<Portfolio.Service.Contract.IResumeService, ResumeService>();
 
-// Add Swagger/OpenAPI
 // Add Swagger/OpenAPI
 builder.Services.AddSwaggerGen(options =>
 {

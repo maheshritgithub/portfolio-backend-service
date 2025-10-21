@@ -55,6 +55,11 @@ Portfolio.Service/
 - Linked to the authenticated user.
 - Includes fields for description, role, duration, and technologies used.
 
+
+### 📄 Resume Management
+- Upload, download, and delete resumes for users.
+- Resumes stored as **byte arrays** in the database.
+
 ---
 
 ## ⚙️ Setup Instructions
@@ -94,6 +99,8 @@ Open your browser and visit:
 | `/api/aboutme` | GET / POST / PUT / DELETE | Manage About Me section |
 | `/api/experience` | GET / POST / PUT / DELETE | Manage user experiences |
 | `/api/projects` | GET / POST / PUT / DELETE | Manage user projects |
+| `/api/resume` | POST | Upload a resume for a specific user | DELETE | 
+| `/api/resume/{userId}` | GET | Download the resume of a specific user (returns PDF/DOCX) |
 
 ---
 
