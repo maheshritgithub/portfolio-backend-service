@@ -23,10 +23,9 @@ public interface IUserDetailsService
     /// <summary>
     /// Creates a new User Details entry for a user.
     /// </summary>
-    /// <param name="userId">The unique identifier of the user.</param>
     /// <param name="userDetails">The User Details information to be created.</param>
     /// <returns>The created User Details information.</returns>
-    Task<UserDetailsResponseModel> AddAsync(Guid userId, UserDetailsRequestModel userDetails);
+    Task<UserDetailsResponseModel> AddAsync(UserDetailsRequestModel userDetails);
 
     /// <summary>
     /// Updates the User Details information for a specific user.

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Portfolio.Service.Db;
 
@@ -10,9 +11,11 @@ using Portfolio.Service.Db;
 namespace Portfolio.Service.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251021170736_AllowMultipleExperiencesPerUser")]
+    partial class AllowMultipleExperiencesPerUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.16");
@@ -65,7 +68,7 @@ namespace Portfolio.Service.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Experience", (string)null);
+                    b.ToTable("Experience");
                 });
 
             modelBuilder.Entity("Portfolio.Service.Db.Models.Project", b =>
@@ -112,7 +115,7 @@ namespace Portfolio.Service.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Project", (string)null);
+                    b.ToTable("Project");
                 });
 
             modelBuilder.Entity("Portfolio.Service.Db.Models.Resume", b =>
@@ -143,7 +146,7 @@ namespace Portfolio.Service.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Resume", (string)null);
+                    b.ToTable("Resume");
                 });
 
             modelBuilder.Entity("Portfolio.Service.Db.Models.User", b =>
@@ -183,7 +186,7 @@ namespace Portfolio.Service.Migrations
                     b.HasIndex("Username")
                         .IsUnique();
 
-                    b.ToTable("User", (string)null);
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("Portfolio.Service.Db.Models.UserDetails", b =>
@@ -216,7 +219,7 @@ namespace Portfolio.Service.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserDetail", (string)null);
+                    b.ToTable("UserDetail");
                 });
 
             modelBuilder.Entity("Portfolio.Service.Db.Models.Experience", b =>

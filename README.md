@@ -42,7 +42,7 @@ Portfolio.Service/
 - Validation with DataAnnotations.
 - Clean controller-service separation.
 
-### 🧠 About Me Section
+### 🧠 User Details Section
 - Stores user’s personal description and skill sets.
 - Linked to user through UserId.
 
@@ -96,7 +96,7 @@ Open your browser and visit:
 | Endpoint | Method | Description |
 |-----------|--------|-------------|
 | `/api/users` | GET / POST / PUT / DELETE | Manage users |
-| `/api/aboutme` | GET / POST / PUT / DELETE | Manage About Me section |
+| `/api/userDetails` | GET / POST / PUT / DELETE | Manage User Details section |
 | `/api/experience` | GET / POST / PUT / DELETE | Manage user experiences |
 | `/api/projects` | GET / POST / PUT / DELETE | Manage user projects |
 | `/api/resume` | POST | Upload a resume for a specific user | DELETE | 

@@ -48,13 +48,13 @@ public class UserDetailsController(IUserDetailsService userDetailsService) : Con
     /// <param name="userId">The unique identifier of the user.</param>
     /// <param name="userDetails">The User Details information to be created.</param>
     /// <returns>The created User Details information.</returns>
-    [HttpPost("{userId}")]
+    [HttpPost]
     [ProducesResponseType(statusCode: StatusCodes.Status404NotFound, type: typeof(ProblemDetails))]
     [ProducesResponseType(statusCode: StatusCodes.Status201Created, type: typeof(UserDetailsResponseModel))]
     [ProducesResponseType(statusCode: StatusCodes.Status500InternalServerError, type: typeof(ProblemDetails))]
-    public async Task<ActionResult<UserDetailsResponseModel>> AddAsync(Guid userId, UserDetailsRequestModel userDetails)
+    public async Task<ActionResult<UserDetailsResponseModel>> AddAsync(UserDetailsRequestModel userDetails)
     {
-        return await userDetailsService.AddAsync(userId, userDetails);
+        return await userDetailsService.AddAsync(userDetails);
     }
 
     /// <summary>

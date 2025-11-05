@@ -46,7 +46,7 @@ namespace Portfolio.Entities.RequestModel
         /// Main project image data.
         /// </summary>
         [Required]
-        public ProjectImage Image { get; set; } = default!;
+        public List<ProjectImage> Image { get; set; } = default!;
     }
 
     /// <summary>
