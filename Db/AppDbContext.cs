@@ -76,8 +76,8 @@ namespace Portfolio.Service.Db
         {
             builder.Entity<UserDetails>()
                 .HasOne<User>()
-                .WithOne()
-                .HasForeignKey<UserDetails>(a => a.UserId)
+                .WithMany()
+                .HasForeignKey(a => a.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
 
@@ -85,8 +85,8 @@ namespace Portfolio.Service.Db
         {
             builder.Entity<Experience>()
                 .HasOne<User>()
-                .WithOne()
-                .HasForeignKey<Experience>(a => a.UserId)
+                .WithMany()
+                .HasForeignKey(a => a.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
 
@@ -102,7 +102,7 @@ namespace Portfolio.Service.Db
                 .Property(d => d.Image)
                 .HasConversion(
                 serialize => JsonSerializer.Serialize(serialize, SerializerOptions),
-                deserialize => JsonSerializer.Deserialize<ProjectImage>(deserialize, SerializerOptions)!);
+                deserialize => JsonSerializer.Deserialize<List<ProjectImage>>(deserialize, SerializerOptions)!);
         }
 
         private static void DefaultResumeDbBindings(ModelBuilder builder)

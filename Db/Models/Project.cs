@@ -30,6 +30,6 @@ namespace Portfolio.Service.Db.Models
 
         // Represent the main project image (can be extended to list if needed)
         [Required]
-        public ProjectImage Image { get; set; } = default!;
+        public List<ProjectImage> Image { get; set; } = default!;
     }
 }

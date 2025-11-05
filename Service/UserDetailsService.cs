@@ -30,20 +30,20 @@ public class UserDetailsService(AppDbContext dbContext, IMapper mapper, ILogger<
               .ToListAsync();
     }
 
-    public async Task<UserDetailsResponseModel> AddAsync(Guid userId, UserDetailsRequestModel aboutMe)
+    public async Task<UserDetailsResponseModel> AddAsync(UserDetailsRequestModel userInfo)
     {
-        logger.LogInformation("AddAsync() -> Creating User Details for user {UserId}", userId);
+        logger.LogInformation("AddAsync() -> Creating User Details for user {UserId}", userInfo.UserId);
 
-        _ = await userService.GetAsync(userId)
+        _ = await userService.GetAsync(userInfo.UserId)
             ?? throw new NotFoundException("The specified user does not exist to add the details");
 
-        if (await dbContext.UserDetail.FirstOrDefaultAsync(a => a.UserId == userId) != null)
+        if (await dbContext.UserDetail.FirstOrDefaultAsync(a => a.UserId == userInfo.UserId) != null)
             throw new Exception("User details already exist for the specified user. Duplicate entries are not allowed.");
 
         try
         {
-            UserDetails userDetails = mapper.Map<UserDetails>(aboutMe);
-            userDetails.UserId = userId;
+            UserDetails userDetails = mapper.Map<UserDetails>(userInfo);
+            userDetails.UserId = userInfo.UserId;
             userDetails.CreatedAt = DateTime.UtcNow;
             userDetails.UpdatedAt = userDetails.CreatedAt;
 
@@ -54,7 +54,7 @@ public class UserDetailsService(AppDbContext dbContext, IMapper mapper, ILogger<
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "AddAsync() -> Error occurred while creating User Details for user {UserId}", userId);
+            logger.LogError(ex, "AddAsync() -> Error occurred while creating User Details for user {UserId}", userInfo.UserId);
 
             throw;
         }
