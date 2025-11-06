@@ -111,8 +111,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseDefaultFiles(); 
+app.UseStaticFiles();
+
 app.UseAuthorization();
 app.MapControllers();
+
+app.MapFallbackToFile("index.html");
 
 if (enableCors && corsUrls.Length > 0)
     app.UseCors("Dev");
