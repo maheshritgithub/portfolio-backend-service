@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1764685485929,
+  "timestamp": 1764687686846,
   "index": "/index.html",
   "assetGroups": [
     {
@@ -13,7 +13,7 @@
       "urls": [
         "/favicon.ico",
         "/index.html",
-        "/main-GHVTCSTU.js",
+        "/main-7HZ2AVKZ.js",
         "/polyfills-CQZK2RGY.js",
         "/styles-QGLXVZBP.css"
       ],
@@ -128,8 +128,8 @@
     "/assets/i18n/en.json": "5c6905b41b08749a1118ed277c1f76071d2391d4",
     "/assets/lotties/loader.json": "2766ab688f8b10bdaca3c8215141db5956339b49",
     "/favicon.ico": "216416b0e8efb71cc8e66e11cc40baf206704576",
-    "/index.html": "a91d89a48fa6748f7fdc7b1bc19759df291a027f",
-    "/main-GHVTCSTU.js": "e002dc898bea98006812eeec561f71dc01828f20",
+    "/index.html": "d5ce3eee2bd9b1f63cb465b0402c6a5f3db6d5b1",
+    "/main-7HZ2AVKZ.js": "00c6c89455d1782a485661f987a50c7e77dfaf5b",
     "/polyfills-CQZK2RGY.js": "bf02eddaeea9a385afd1d56994168bba943fc820",
     "/styles-QGLXVZBP.css": "a3ea6ea612df88cb244e0bb3920a0d9cf34999f3"
   },
