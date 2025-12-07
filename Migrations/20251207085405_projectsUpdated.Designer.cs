@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Portfolio.Service.Db;
 
@@ -10,55 +11,14 @@ using Portfolio.Service.Db;
 namespace Portfolio.Service.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251207085405_projectsUpdated")]
+    partial class projectsUpdated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.16");
-
-            modelBuilder.Entity("Portfolio.Entities.RequestModel.ImpactModel", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Statement")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ImpactModel");
-                });
-
-            modelBuilder.Entity("Portfolio.Entities.RequestModel.ProjectModel", b =>
-                {
-                    b.Property<string>("Name")
-                        .HasMaxLength(150)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Contribution")
-                        .HasMaxLength(2000)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("ExperienceId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Technologies")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Name");
-
-                    b.HasIndex("ExperienceId");
-
-                    b.ToTable("ProjectModel");
-                });
 
             modelBuilder.Entity("Portfolio.Service.Db.Models.Experience", b =>
                 {
@@ -80,9 +40,6 @@ namespace Portfolio.Service.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("EndDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("ImpactId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Location")
@@ -108,8 +65,6 @@ namespace Portfolio.Service.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ImpactId");
 
                     b.HasIndex("UserId");
 
@@ -266,26 +221,13 @@ namespace Portfolio.Service.Migrations
                     b.ToTable("UserDetail");
                 });
 
-            modelBuilder.Entity("Portfolio.Entities.RequestModel.ProjectModel", b =>
-                {
-                    b.HasOne("Portfolio.Service.Db.Models.Experience", null)
-                        .WithMany("Projects")
-                        .HasForeignKey("ExperienceId");
-                });
-
             modelBuilder.Entity("Portfolio.Service.Db.Models.Experience", b =>
                 {
-                    b.HasOne("Portfolio.Entities.RequestModel.ImpactModel", "Impact")
-                        .WithMany()
-                        .HasForeignKey("ImpactId");
-
                     b.HasOne("Portfolio.Service.Db.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Impact");
                 });
 
             modelBuilder.Entity("Portfolio.Service.Db.Models.Project", b =>
@@ -313,11 +255,6 @@ namespace Portfolio.Service.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Portfolio.Service.Db.Models.Experience", b =>
-                {
-                    b.Navigation("Projects");
                 });
 #pragma warning restore 612, 618
         }

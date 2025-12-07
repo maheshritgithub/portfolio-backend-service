@@ -29,7 +29,6 @@ namespace Portfolio.Service.Db.Models
         public string? ProjectUrl { get; set; }
 
         // Represent the main project image (can be extended to list if needed)
-        [Required]
-        public List<ProjectImage> Image { get; set; } = default!;
+        public List<ProjectImage>? Image { get; set; } = default!;
     }
 }

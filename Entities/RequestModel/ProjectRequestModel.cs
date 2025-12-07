@@ -45,8 +45,7 @@ namespace Portfolio.Entities.RequestModel
         /// <summary>
         /// Main project image data.
         /// </summary>
-        [Required]
-        public List<ProjectImage> Image { get; set; } = default!;
+        public List<ProjectImage>? Image { get; set; }
     }
 
     /// <summary>
@@ -62,21 +61,18 @@ namespace Portfolio.Entities.RequestModel
         /// <summary>
         /// Raw image data.
         /// </summary>
-        [Required]
-        public byte[] Data { get; set; } = default!;
+        public byte[]? Data { get; set; } 
 
         /// <summary>
         /// The format of the provided image
         /// </summary>
-        [Required]
-        public ImageType Type { get; set; }
+        public ImageType? Type { get; set; }
 
         /// <summary>
         /// Descriptive label for the image. Max length: 100 characters.
         /// </summary>
-        [Required]
         [MaxLength(100)]
-        public string Label { get; set; } = default!;
+        public string? Label { get; set; } 
     }
 
     /// <summary>
