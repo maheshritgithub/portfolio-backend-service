@@ -59,4 +59,56 @@ public class ExperienceRequestModel
     /// </summary>
     [Required]
     public List<string> Responsibilities { get; set; } = default!;
+
+    /// <summary>
+    /// The List of Project summary 
+    /// </summary>
+    public List<ProjectModel>? Projects { get; set; }
+
+    /// <summary>
+    /// ImpactModel Created on the Projects
+    /// </summary>
+    public ImpactModel? Impact { get; set; }
+}
+
+public class ProjectModel
+{
+    /// <summary>
+    /// The Name of the Project
+    /// </summary>
+    [Key]
+    [Required]
+    [MaxLength(150)]
+    public string Name { get; set; } = default!;
+
+    /// <summary>
+    /// The description of the project
+    /// </summary>
+    [Required]
+    [MaxLength(2000)]
+    public string Description { get; set; } = default!;
+
+    /// <summary>
+    /// The Technologies used in the project.
+    /// </summary>
+    public List<string>? Technologies { get; set; }
+
+    /// <summary>
+    /// The specific contribution to this company project.
+    /// </summary>
+    [MaxLength(2000)]
+    public string? Contribution { get; set; }
+}
+
+public class ImpactModel
+{
+    /// <summary>
+    /// The Unique Identifier of the Impact
+    /// </summary>
+    public Guid Id { get; set; }
+
+    /// <summary>
+    /// ImpactModel statement describing measurable results.
+    /// </summary>
+    public string Statement { get; set; } = default!;
 }

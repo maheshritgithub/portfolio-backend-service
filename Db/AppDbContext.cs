@@ -3,6 +3,7 @@ using Portfolio.Service.Db.Models;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Portfolio.Entities.RequestModel;
+using Project = Portfolio.Service.Db.Models.Project;
 
 namespace Portfolio.Service.Db
 {

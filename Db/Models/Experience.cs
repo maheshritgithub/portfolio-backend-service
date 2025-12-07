@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Portfolio.Entities.RequestModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Portfolio.Service.Db.Models;
@@ -33,4 +34,8 @@ public class Experience : BaseTimeHandling
 
     [Required]
     public List<string> Responsibilities { get; set; } = default!;
+
+    public List<ProjectModel>? Projects { get; set; }
+
+    public ImpactModel? Impact { get; set; }
 }
