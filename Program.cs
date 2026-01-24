@@ -1,8 +1,8 @@
-using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Portfolio.Service.Db;
 using Portfolio.Service.Misc;
 using Portfolio.Service.Service;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,16 +13,16 @@ builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 // Configure DbContext with SQLite
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    var newConnectionString = new SqliteConnectionStringBuilder(connectionString)
-    {
-        ForeignKeys = true,
-        Pooling = true,
-        Cache = SqliteCacheMode.Default
-    };
-
-    options.UseSqlite(newConnectionString.ToString());
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        sqlOptions =>
+        {
+            sqlOptions.MigrationsHistoryTable("__EFMigrationsHistory");
+            sqlOptions.EnableRetryOnFailure();
+        });
 });
 
 var enableCors = builder.Configuration.GetValue<bool>("AppConfig:EnableCors");
