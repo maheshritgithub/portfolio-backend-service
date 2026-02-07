@@ -14,6 +14,9 @@ namespace Portfolio.Service.Db.Models
         public Guid UserId { get; set; }
 
         [Required]
+        public int DisplayOrder { get; set; } 
+
+        [Required]
         [MaxLength(150)]
         public string Name { get; set; } = default!;
 

@@ -37,5 +37,5 @@ public class Experience : BaseTimeHandling
 
     public List<ProjectModel>? Projects { get; set; }
 
-    public ImpactModel? Impact { get; set; }
+    public List<ImpactModel>? Impact { get; set; }
 }

@@ -68,7 +68,7 @@ public class ExperienceRequestModel
     /// <summary>
     /// ImpactModel Created on the Projects
     /// </summary>
-    public ImpactModel? Impact { get; set; }
+    public List<ImpactModel>? Impact { get; set; }
 }
 
 public class ProjectModel

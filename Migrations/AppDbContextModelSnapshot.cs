@@ -22,49 +22,6 @@ namespace Portfolio.Service.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Portfolio.Entities.RequestModel.ImpactModel", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Statement")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ImpactModel");
-                });
-
-            modelBuilder.Entity("Portfolio.Entities.RequestModel.ProjectModel", b =>
-                {
-                    b.Property<string>("Name")
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
-                    b.Property<string>("Contribution")
-                        .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
-
-                    b.Property<Guid?>("ExperienceId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Technologies")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Name");
-
-                    b.HasIndex("ExperienceId");
-
-                    b.ToTable("ProjectModel");
-                });
-
             modelBuilder.Entity("Portfolio.Service.Db.Models.Experience", b =>
                 {
                     b.Property<Guid>("Id")
@@ -87,12 +44,15 @@ namespace Portfolio.Service.Migrations
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("ImpactId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Impact")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Location")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Projects")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Responsibilities")
                         .IsRequired()
@@ -114,8 +74,6 @@ namespace Portfolio.Service.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ImpactId");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("Experience");
@@ -133,6 +91,9 @@ namespace Portfolio.Service.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("int");
 
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
@@ -271,26 +232,13 @@ namespace Portfolio.Service.Migrations
                     b.ToTable("UserDetail");
                 });
 
-            modelBuilder.Entity("Portfolio.Entities.RequestModel.ProjectModel", b =>
-                {
-                    b.HasOne("Portfolio.Service.Db.Models.Experience", null)
-                        .WithMany("Projects")
-                        .HasForeignKey("ExperienceId");
-                });
-
             modelBuilder.Entity("Portfolio.Service.Db.Models.Experience", b =>
                 {
-                    b.HasOne("Portfolio.Entities.RequestModel.ImpactModel", "Impact")
-                        .WithMany()
-                        .HasForeignKey("ImpactId");
-
                     b.HasOne("Portfolio.Service.Db.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Impact");
                 });
 
             modelBuilder.Entity("Portfolio.Service.Db.Models.Project", b =>
@@ -318,11 +266,6 @@ namespace Portfolio.Service.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Portfolio.Service.Db.Models.Experience", b =>
-                {
-                    b.Navigation("Projects");
                 });
 #pragma warning restore 612, 618
         }

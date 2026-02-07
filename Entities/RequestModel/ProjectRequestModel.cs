@@ -30,6 +30,9 @@ namespace Portfolio.Entities.RequestModel
         /// </summary>
         public bool IsHighlighted { get; set; } = false;
 
+        [Required]
+        public int DisplayOrder { get; set; }
+
         /// <summary>
         /// Comma-separated list of technologies used. Max length: 500 characters.
         /// </summary>

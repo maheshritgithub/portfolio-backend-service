@@ -6,23 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Portfolio.Service.Migrations
 {
     /// <inheritdoc />
-    public partial class initialCreate : Migration
+    public partial class Initialcreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "ImpactModel",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Statement = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ImpactModel", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "User",
                 columns: table => new
@@ -54,18 +42,14 @@ namespace Portfolio.Service.Migrations
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(3000)", maxLength: 3000, nullable: false),
                     Responsibilities = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ImpactId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Projects = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Impact = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Experience", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Experience_ImpactModel_ImpactId",
-                        column: x => x.ImpactId,
-                        principalTable: "ImpactModel",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Experience_User_UserId",
                         column: x => x.UserId,
@@ -80,6 +64,7 @@ namespace Portfolio.Service.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DisplayOrder = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsHighlighted = table.Column<bool>(type: "bit", nullable: false),
@@ -145,31 +130,6 @@ namespace Portfolio.Service.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "ProjectModel",
-                columns: table => new
-                {
-                    Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
-                    Technologies = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Contribution = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
-                    ExperienceId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProjectModel", x => x.Name);
-                    table.ForeignKey(
-                        name: "FK_ProjectModel_Experience_ExperienceId",
-                        column: x => x.ExperienceId,
-                        principalTable: "Experience",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Experience_ImpactId",
-                table: "Experience",
-                column: "ImpactId");
-
             migrationBuilder.CreateIndex(
                 name: "IX_Experience_UserId",
                 table: "Experience",
@@ -179,11 +139,6 @@ namespace Portfolio.Service.Migrations
                 name: "IX_Project_UserId",
                 table: "Project",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProjectModel_ExperienceId",
-                table: "ProjectModel",
-                column: "ExperienceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Resume_UserId",
@@ -207,22 +162,16 @@ namespace Portfolio.Service.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Project");
+                name: "Experience");
 
             migrationBuilder.DropTable(
-                name: "ProjectModel");
+                name: "Project");
 
             migrationBuilder.DropTable(
                 name: "Resume");
 
             migrationBuilder.DropTable(
                 name: "UserDetail");
-
-            migrationBuilder.DropTable(
-                name: "Experience");
-
-            migrationBuilder.DropTable(
-                name: "ImpactModel");
 
             migrationBuilder.DropTable(
                 name: "User");

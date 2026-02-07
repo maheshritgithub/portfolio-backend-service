@@ -22,7 +22,11 @@ public class ExperienceService(AppDbContext dbContext, IMapper mapper, ILogger<E
 
             experienceEntity.CreatedAt = DateTime.UtcNow;
             experienceEntity.UpdatedAt = experienceEntity.CreatedAt;
-            experienceEntity.Impact.Id = Guid.NewGuid();
+
+            foreach (var work in experienceEntity.Impact)
+            {
+                work.Id = Guid.NewGuid();
+            }
 
             dbContext.Experience.Add(experienceEntity);
             await dbContext.SaveChangesAsync();

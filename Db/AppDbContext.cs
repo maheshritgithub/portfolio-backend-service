@@ -80,6 +80,12 @@ namespace Portfolio.Service.Db
                 .WithMany()
                 .HasForeignKey(a => a.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<UserDetails>()
+           .Property(d => d.SkillSet)
+           .HasConversion(
+               serialize => JsonSerializer.Serialize(serialize, SerializerOptions),
+               deserialize => JsonSerializer.Deserialize<List<string>>(deserialize, SerializerOptions)!);
         }
 
         private static void DefaultExperienceDbBindings(ModelBuilder builder)
@@ -89,6 +95,24 @@ namespace Portfolio.Service.Db
                 .WithMany()
                 .HasForeignKey(a => a.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Experience>()
+               .Property(d => d.Impact)
+               .HasConversion(
+               serialize => JsonSerializer.Serialize(serialize, SerializerOptions),
+               deserialize => JsonSerializer.Deserialize<List<ImpactModel>>(deserialize, SerializerOptions)!);
+
+            builder.Entity<Experience>()
+               .Property(d => d.Responsibilities)
+               .HasConversion(
+               serialize => JsonSerializer.Serialize(serialize, SerializerOptions),
+               deserialize => JsonSerializer.Deserialize<List<string>>(deserialize, SerializerOptions)!);
+
+            builder.Entity<Experience>()
+               .Property(d => d.Projects)
+               .HasConversion(
+               serialize => JsonSerializer.Serialize(serialize, SerializerOptions),
+               deserialize => JsonSerializer.Deserialize<List<ProjectModel>>(deserialize, SerializerOptions)!);
         }
 
         private static void DefaultProjectDbBindings(ModelBuilder builder)
